@@ -1,69 +1,73 @@
-# Midi Fighter 3D Stream Deck
+# Midi Fighter 3D Macro Controller
 
-Turn your DJ TechTools Midi Fighter 3D into a powerful stream deck, soundboard, and automation controller. Map 64 buttons across 4 banks to play sounds with volume control, run scripts, trigger webhooks, and inject keyboard shortcuts.
+Turned my midi controller into a stream deck, soundboard, and automation controller. Mapping 64 buttons across 4 banks to play sounds with volume control, run scripts, trigger webhooks, and inject keyboard shortcuts.
 
-## Current Status: Phase 3 Active
 
-A Python-based MIDI macro controller with **4 programmable banks**, **pre-loaded sound playback**, and **volume control per button**.
+- Key Features:
+  - 4 Banks: A, B, C, D - 64 total buttons
+  - Auto-switching: Press any grid button to automatically switch to its bank
+  - Pre-loaded: All sounds loaded into memory at startup for instant playback
+  - Volume Control: Set per-sound default and per-button override
+  - Toggle Behavior: Press button again to stop currently playing sound
 
 ---
 
-## Completed Features
+## What Exists
 
-### Phase 1: Discovery & Data Collection ✅
-- ✅ Manual testing script maps actual MIDI events
-- ✅ Documented note numbers and channel assignments
+- Discovery & Data Collection
+- Manual testing script maps actual MIDI events
+- Documented note numbers and channel assignments:
   - Grid buttons: Notes 36-99 on Channel 3 (mido channel 2)
   - Bank switches: Notes 0-3 on Channel 4 (mido channel 3)
   - Bank A: 36-51, B: 52-67, C: 68-83, D: 84-99
 
-### Phase 2: Core Infrastructure ✅
-- ✅ mido/rtmidi event loop with callback-based input
-- ✅ Bank state machine with 4 modes (A/B/C/D)
-- ✅ Auto-bank detection (press any grid button to switch)
-- ✅ Configuration system (YAML mappings with volume control)
+- Core Infrastructure
+- mido/rtmidi event loop with callback-based input
+- Bank state machine with 4 modes (A/B/C/D)
+- Auto-bank detection (press any grid button to switch)
+- Configuration system (YAML mappings with volume control)
 
-### Phase 3: Soundboard Engine ✅
-- ✅ Audio playback with sounddevice
-- ✅ **Pre-loaded sounds** - instant playback, no first-press delay
-- ✅ **Multi-bank soundboard** - different sounds per bank
-- ✅ **Volume control** per sound and per-button override
-- ✅ Stop/restart overlapping sounds (toggle behavior)
+- Soundboard Engine
+- Audio playback with sounddevice
+- Pre-loaded sounds for instant playback, no first-press delay
+- Multi-bank soundboard with different sounds per bank
+- Volume control per sound and per-button override
+- Stop/restart overlapping sounds (toggle behavior)
 
 ---
 
 ## Todo List
 
-### Phase 4: Automation Engine
-- [ ] Bash/Python script execution with args
-- [ ] HTTP webhooks: POST/GET with httpx
-- [ ] Keyboard shortcuts via pynput
+- Automation Engine
+  - Bash/Python script execution with args
+  - HTTP webhooks: POST/GET with httpx
+  - Keyboard shortcuts via pynput
 
-### Phase 5: Audio Enhancement
-- [ ] Multi-device routing: Speakers + mic monitor simultaneously
-- [ ] Audio loop support
+- Audio Enhancement
+  - Multi-device routing: Speakers + mic monitor simultaneously
+  - Audio loop support
 
-### Phase 6: LED & Polish
-- [ ] Static LED colors per bank
-- [ ] CLI interface for testing/config
-- [ ] LED: Flash on press animations
-- [ ] LED: Full RGB control per button
+- LED & Polish
+  - Static LED colors per bank
+  - CLI interface for testing/config
+  - LED flash on press animations
+  - Full RGB control per button
 
-### Phase 7: Code Quality & Tooling
-- [ ] Add mypy for static type checking
-- [ ] Add typer for CLI interface
-- [ ] Add ruff for linting and formatting
-- [ ] Add type hints to all modules
-- [ ] Create development documentation
+- Code Quality & Tooling
+  - Add mypy for static type checking
+  - Add typer for CLI interface
+  - Add ruff for linting and formatting
+  - Add type hints to all modules
+  - Create development documentation
 
-### Roadmap
-- [ ] Motion: CC passthrough to other apps
-- [ ] Motion: Gesture triggers (tilt actions)
-- [ ] Security: Script sandboxing/allowlist
-- [ ] Security: Execution timeouts
-- [ ] Config: Include directive for split files
-- [ ] Deployment: systemd service support
-- [ ] Deployment: GUI tray application
+Roadmap
+- Motion: CC passthrough to other apps
+- Motion: Gesture triggers (tilt actions)
+- Security: Script sandboxing/allowlist
+- Security: Execution timeouts
+- Config: Include directive for split files
+- Deployment: systemd service support
+- Deployment: GUI tray application
 
 ---
 
@@ -118,13 +122,20 @@ banks:
       sound: camera
 ```
 
-**Key Features:**
-- **4 Banks**: A, B, C, D - 64 total buttons
-- **Auto-switching**: Press any grid button to automatically switch to its bank
-- **Pre-loaded**: All sounds loaded into memory at startup for instant playback
-- **Volume Control**: Set per-sound default and per-button override
-- **Toggle Behavior**: Press button again to stop currently playing sound
+---
 
-## License
+## Asteroids + 3D Sensors
 
-MIT
+The Midi Fighter 3D includes 3-axis motion sensors that output continuous controller (CC) messages. This enables controlling games and applications with physical gestures.
+
+Planned Use Cases:
+- Tilt-to-Steer: X/Y accelerometer mapped to ship rotation
+- Thrust Gesture: Forward tilt for thrust, backward for reverse
+- Fire Button: Velocity-sensitive grid buttons for weapons
+- Bank Switch: 4 weapon/powerup modes per bank
+
+MIDI Mapping for Game Control:
+- CC 16: X-axis (tilt left/right) → ship rotation
+- CC 17: Y-axis (tilt forward/back) → thrust/reverse
+- CC 18: Z-axis (twist/tilt) → hyperspace/special
+- Notes 0-15: Fire, shields, special weapons per bank
