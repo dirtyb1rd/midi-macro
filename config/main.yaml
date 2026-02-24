@@ -1,0 +1,14 @@
+# Midi Fighter 3D Multi-Bank Configuration
+# Main configuration file - references individual bank configs
+
+midi:
+  port_name: "Midi Fighter 3D:Midi Fighter 3D MIDI 1 20:0"
+  grid_channel: 1
+  bank_channel: 2
+
+# Bank configuration files - each bank references its own YAML file
+banks:
+  A: config/banks/bass.yaml   # Bass sounds (shortest to longest)
+  B: config/banks/drums.yaml  # Drum sounds (one-shots, shortest to longest)
+  C: config/banks/synth.yaml  # Synth sounds (shortest to longest)
+  D: null                     # Reserved for automation

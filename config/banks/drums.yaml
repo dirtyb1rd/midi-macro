@@ -1,0 +1,87 @@
+# Bank B: Drum Sounds
+# Sorted by duration (shortest to longest)
+# Range: 0.42s to 2.82s (all one-shots, perfect for drum pads)
+
+sounds:
+  RNRLT_DustyClap1_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_DustyClap1_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_BreatherPerc_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_BreatherPerc_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_DustyKick_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_DustyKick_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_DustyClap2_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_DustyClap2_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_SlammerHat_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_SlammerHat_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_SlammerSnare_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_SlammerSnare_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_SteamPerc_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_SteamPerc_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_WestwaySnare_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_WestwaySnare_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_BreathPerc_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_BreathPerc_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_Hatzzz_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_Hatzzz_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_SlammerKick_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_SlammerKick_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_DustySnare_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_DustySnare_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_DarkClap_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_DarkClap_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_DustyRumbleKick_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_DustyRumbleKick_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_LilTom_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_LilTom_OneShot-BANDLAB.wav
+    volume: 1.0
+  RNRLT_DarkKick_OneShot-BANDLAB:
+    file: sounds/hip-hop-pack-1/drums/RNRLT_DarkKick_OneShot-BANDLAB.wav
+    volume: 1.0
+
+mappings:
+  0:
+    sound: RNRLT_DustyClap1_OneShot-BANDLAB
+  1:
+    sound: RNRLT_BreatherPerc_OneShot-BANDLAB
+  2:
+    sound: RNRLT_DustyKick_OneShot-BANDLAB
+  3:
+    sound: RNRLT_DustyClap2_OneShot-BANDLAB
+  4:
+    sound: RNRLT_SlammerHat_OneShot-BANDLAB
+  5:
+    sound: RNRLT_SlammerSnare_OneShot-BANDLAB
+  6:
+    sound: RNRLT_SteamPerc_OneShot-BANDLAB
+  7:
+    sound: RNRLT_WestwaySnare_OneShot-BANDLAB
+  8:
+    sound: RNRLT_BreathPerc_OneShot-BANDLAB
+  9:
+    sound: RNRLT_Hatzzz_OneShot-BANDLAB
+  10:
+    sound: RNRLT_SlammerKick_OneShot-BANDLAB
+  11:
+    sound: RNRLT_DustySnare_OneShot-BANDLAB
+  12:
+    sound: RNRLT_DarkClap_OneShot-BANDLAB
+  13:
+    sound: RNRLT_DustyRumbleKick_OneShot-BANDLAB
+  14:
+    sound: RNRLT_LilTom_OneShot-BANDLAB
+  15:
+    sound: RNRLT_DarkKick_OneShot-BANDLAB

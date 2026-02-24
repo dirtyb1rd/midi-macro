@@ -1,5 +1,6 @@
 """
 Main entry point for Midi Fighter 3D Stream Deck with multi-bank and automation support.
+Uses modular configuration: config/main.yaml + config/banks/*.yaml
 """
 
 import yaml
@@ -12,10 +13,44 @@ from soundboard import Soundboard
 from bank_manager import BankManager
 from action_runner import ActionRunner
 
+
+def load_config():
+    """Load modular configuration from main.yaml and bank files."""
+    config_path = Path(__file__).parent.parent / "config" / "main.yaml"
+
+    with open(config_path) as f:
+        main_config = yaml.safe_load(f)
+
+    # Load individual bank configurations
+    all_sounds = {}
+    all_banks = {}
+
+    for bank_name, bank_file in main_config.get("banks", {}).items():
+        if bank_file is None:
+            # Bank D is reserved/empty
+            all_banks[bank_name] = {}
+            continue
+
+        bank_path = Path(__file__).parent.parent / bank_file
+        with open(bank_path) as f:
+            bank_config = yaml.safe_load(f)
+
+        # Merge sounds from this bank
+        bank_sounds = bank_config.get("sounds", {})
+        all_sounds.update(bank_sounds)
+
+        # Store bank mappings
+        all_banks[bank_name] = bank_config.get("mappings", {})
+
+    return {
+        "midi": main_config.get("midi", {}),
+        "sounds": all_sounds,
+        "banks": all_banks,
+    }
+
+
 # Load configuration
-config_path = Path(__file__).parent.parent / "config.yaml"
-with open(config_path) as f:
-    config = yaml.safe_load(f)
+config = load_config()
 
 # Initialize components
 soundboard = Soundboard(
@@ -72,6 +107,7 @@ midi = MidiHandler(
 def signal_handler(sig, frame):
     print("\nShutting down...")
     action_runner.cleanup()
+    soundboard.cleanup()
     midi.stop()
     sys.exit(0)
 
@@ -93,7 +129,8 @@ if __name__ == "__main__":
     print("=" * 50)
     print("Midi Fighter 3D Stream Deck - Multi-Bank + Automation")
     print("=" * 50)
-    print(f"Banks: A, B, C, D ({total_buttons} total buttons)")
+    print(f"Banks: A (Bass), B (Drums), C (Synth), D (Reserved)")
+    print(f"Total buttons: {total_buttons}")
     print(f"Actions configured: {action_count}")
     print("Press Ctrl+C to exit\n")
 
