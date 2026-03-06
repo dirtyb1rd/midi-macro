@@ -4,21 +4,37 @@ Uses single persistent OutputStream with mixer thread for ALSA compatibility
 and minimal latency with overlapping sound support.
 """
 
+from pathlib import Path
+import threading
+import time
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+import numpy.typing as npt
 import sounddevice as sd
 import soundfile as sf
-import threading
-import numpy as np
-from pathlib import Path
-import time
+
+from midi_types import (
+    ActiveSound,
+    AudioData,
+    BankMappings,
+    SoundsDict,
+)
 
 
 class Soundboard:
+    """Audio playback engine with pre-loaded sounds and mixer thread."""
+    
     # Standard output configuration
-    OUTPUT_SAMPLE_RATE = 44100
-    OUTPUT_CHANNELS = 2
-    BLOCK_SIZE = 2048
+    OUTPUT_SAMPLE_RATE: int = 44100
+    OUTPUT_CHANNELS: int = 2
+    BLOCK_SIZE: int = 2048
 
-    def __init__(self, sounds_config, banks_config):
+    def __init__(
+        self,
+        sounds_config: Dict[str, Dict[str, Any]],
+        banks_config: Dict[str, Dict[str, Any]],
+    ) -> None:
         """
         Initialize soundboard with pre-loaded sounds and persistent audio stream.
 
@@ -26,23 +42,23 @@ class Soundboard:
             sounds_config: {sound_name: {file: path, volume: float}}
             banks_config: {bank_name: {note: {sound: name, volume: float}}}
         """
-        self.sounds = {}  # Pre-loaded audio data: {sound_name: (data, volume)}
-        self.banks = {}  # Button mappings: {bank_name: {note: sound_name}}
-        self._lock = threading.Lock()
+        self.sounds: SoundsDict = {}  # Pre-loaded audio data
+        self.banks: BankMappings = {}  # Button mappings
+        self._lock: threading.Lock = threading.Lock()
 
-        # Active sounds being played: list of (sound_data, position, volume)
-        self._active_sounds = []
-        self._mixer_running = False
-        self._output_stream = None
-        self._mixer_thread = None
+        # Active sounds being played
+        self._active_sounds: List[ActiveSound] = []
+        self._mixer_running: bool = False
+        self._output_stream: Optional[sd.OutputStream] = None
+        self._mixer_thread: Optional[threading.Thread] = None
 
         # Pre-load all unique sound files into memory
         print("Loading sounds...")
-        loaded_count = 0
+        loaded_count: int = 0
 
         for sound_name, sound_def in sounds_config.items():
-            filepath = sound_def.get("file")
-            default_volume = sound_def.get("volume", 1.0)
+            filepath: Optional[str] = sound_def.get("file")
+            default_volume: float = sound_def.get("volume", 1.0)
 
             if not filepath:
                 print(f"Warning: No file specified for sound '{sound_name}'")
@@ -51,6 +67,8 @@ class Soundboard:
             path = Path(filepath)
             if path.exists():
                 try:
+                    data: npt.NDArray[np.float32]
+                    samplerate: int
                     data, samplerate = sf.read(str(path), dtype="float32")
 
                     # Convert to stereo if mono
@@ -76,38 +94,47 @@ class Soundboard:
         # Build button mappings
         for bank_name, buttons in banks_config.items():
             self.banks[bank_name] = {}
-            for note, button_def in buttons.items():
+            for note_str, button_def in buttons.items():
+                sound_name: Optional[str] = None
                 if isinstance(button_def, dict):
                     sound_name = button_def.get("sound")
                 else:
                     sound_name = button_def
 
                 if sound_name and sound_name in self.sounds:
-                    self.banks[bank_name][int(note)] = sound_name
+                    note: int = int(note_str)
+                    self.banks[bank_name][note] = sound_name
 
         # Initialize persistent audio stream
         self._init_audio_stream()
 
-    def _resample(self, data, orig_sr, target_sr):
+    def _resample(
+        self,
+        data: npt.NDArray[np.float32],
+        orig_sr: int,
+        target_sr: int,
+    ) -> npt.NDArray[np.float32]:
         """Simple linear resampling using numpy."""
         if orig_sr == target_sr:
             return data
 
         # Calculate resampling ratio
-        ratio = target_sr / orig_sr
-        new_length = int(len(data) * ratio)
+        ratio: float = target_sr / orig_sr
+        new_length: int = int(len(data) * ratio)
 
         # Create interpolation indices
-        indices = np.linspace(0, len(data) - 1, new_length)
+        indices: npt.NDArray[np.float64] = np.linspace(0, len(data) - 1, new_length)
 
         # Linear interpolation for each channel
-        result = np.zeros((new_length, data.shape[1]), dtype="float32")
+        result: npt.NDArray[np.float32] = np.zeros(
+            (new_length, data.shape[1]), dtype="float32"
+        )
         for ch in range(data.shape[1]):
             result[:, ch] = np.interp(indices, np.arange(len(data)), data[:, ch])
 
         return result
 
-    def _init_audio_stream(self):
+    def _init_audio_stream(self) -> None:
         """Initialize persistent OutputStream and start mixer thread."""
         try:
             self._output_stream = sd.OutputStream(
@@ -129,20 +156,25 @@ class Soundboard:
             print(f"Error initializing audio stream: {e}")
             raise
 
-    def _mixer_loop(self):
+    def _mixer_loop(self) -> None:
         """Background thread: continuously mix and play active sounds."""
+        if self._output_stream is None:
+            return
+            
         self._output_stream.start()
 
         while self._mixer_running:
             # Calculate buffer to write
-            buffer = np.zeros((self.BLOCK_SIZE, self.OUTPUT_CHANNELS), dtype="float32")
+            buffer: npt.NDArray[np.float32] = np.zeros(
+                (self.BLOCK_SIZE, self.OUTPUT_CHANNELS), dtype="float32"
+            )
 
             with self._lock:
                 # Mix all active sounds
-                sounds_to_remove = []
+                sounds_to_remove: List[int] = []
 
                 for i, (sound_data, position, volume) in enumerate(self._active_sounds):
-                    remaining = len(sound_data) - position
+                    remaining: int = len(sound_data) - position
 
                     if remaining <= 0:
                         # Sound finished
@@ -150,10 +182,10 @@ class Soundboard:
                         continue
 
                     # Calculate how much to copy
-                    to_copy = min(remaining, self.BLOCK_SIZE)
+                    to_copy: int = min(remaining, self.BLOCK_SIZE)
 
                     # Add to mix buffer with volume
-                    end_pos = position + to_copy
+                    end_pos: int = position + to_copy
                     buffer[:to_copy] += sound_data[position:end_pos] * volume
 
                     # Update position
@@ -173,7 +205,7 @@ class Soundboard:
                 print(f"Audio stream error: {e}")
                 time.sleep(0.01)  # Brief pause on error
 
-    def play(self, bank, note):
+    def play(self, bank: str, note: int) -> None:
         """
         Play sound mapped to bank and normalized note number.
         Sound added immediately to mix for minimal latency.
@@ -187,7 +219,9 @@ class Soundboard:
         if note not in self.banks[bank]:
             return
 
-        sound_name = self.banks[bank][note]
+        sound_name: str = self.banks[bank][note]
+        sound_data: npt.NDArray[np.float32]
+        default_volume: float
         sound_data, default_volume = self.sounds[sound_name]
 
         # Add to active sounds immediately (no thread creation, no stream creation)
@@ -202,7 +236,7 @@ class Soundboard:
             # Add new sound at position 0
             self._active_sounds.append((sound_data, 0, default_volume))
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Stop mixer thread and close audio stream."""
         self._mixer_running = False
 

@@ -3,12 +3,19 @@ MIDI input handler for Midi Fighter 3D.
 Routes all messages to BankManager for bank switching and note normalization.
 """
 
-import mido
 import threading
+from typing import Optional, TYPE_CHECKING
+
+import mido
+
+if TYPE_CHECKING:
+    from bank_manager import BankManager
 
 
 class MidiHandler:
-    def __init__(self, port_name, bank_manager):
+    """Handles MIDI input from Midi Fighter 3D controller."""
+    
+    def __init__(self, port_name: str, bank_manager: "BankManager") -> None:
         """
         Initialize MIDI handler.
 
@@ -16,12 +23,12 @@ class MidiHandler:
             port_name: MIDI port name string
             bank_manager: BankManager instance to route messages to
         """
-        self.port_name = port_name
-        self.bank_manager = bank_manager
-        self._running = False
-        self._thread = None
+        self.port_name: str = port_name
+        self.bank_manager: "BankManager" = bank_manager
+        self._running: bool = False
+        self._thread: Optional[threading.Thread] = None
 
-    def start(self):
+    def start(self) -> None:
         """Start listening for MIDI messages in background thread."""
         self._running = True
         self._thread = threading.Thread(target=self._listen)
@@ -29,13 +36,13 @@ class MidiHandler:
         self._thread.start()
         print(f"MIDI listener started on {self.port_name}")
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop listening for MIDI messages."""
         self._running = False
         if self._thread:
             self._thread.join(timeout=1.0)
 
-    def _listen(self):
+    def _listen(self) -> None:
         """Internal loop for MIDI message processing."""
         try:
             with mido.open_input(self.port_name) as port:
@@ -45,7 +52,7 @@ class MidiHandler:
         except Exception as e:
             print(f"MIDI error: {e}")
 
-    def _process_message(self, msg):
+    def _process_message(self, msg: mido.Message) -> None:
         """Process incoming MIDI message and route to BankManager."""
         if msg.type == "note_on":
             # Route to BankManager which handles both bank switches and grid buttons

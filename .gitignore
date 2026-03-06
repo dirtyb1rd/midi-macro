@@ -1,3 +1,11 @@
+# Nix
+.direnv/
+result
+result-*
+
+# OpenCode
+AGENTS.md
+
 # Audio files
 sounds/*
 !sounds/.gitkeep

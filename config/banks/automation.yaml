@@ -1,0 +1,39 @@
+# Bank D: Automation & Scripts
+# External API integrations and system scripts
+
+sounds: {}  # No sounds - pure automation bank
+
+mappings:
+  # Row 1: Information & APIs (0-3)
+  0:
+    action:
+      type: script
+      file: get_ip.sh
+      args: []
+      blocking: true
+  1:
+    action:
+      type: script
+      file: get_weather.sh
+      args: ["Portland"]  # Change to your city
+      blocking: true
+  2:
+    action:
+      type: script
+      file: get_space_fact.sh
+      args: []
+      blocking: true
+  3:
+    action:
+      type: script
+      file: system_info.sh
+      args: []
+      blocking: true
+
+  # Row 2: Fun (4)
+  4:
+    action:
+      type: script
+      file: get_joke.sh
+      args: []
+      blocking: true

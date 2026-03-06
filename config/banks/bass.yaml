@@ -1,87 +1,74 @@
 # Bank A: Bass Sounds
-# Sorted by duration (shortest to longest)
-# Range: 10.67s to 21.33s
+# Japanese Game Sounds - Bass collection
 
 sounds:
-  RNRLT_Royal_Cm_90_Bass-90BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Royal_Cm_90_Bass-90BPM-C minor-BANDLAB.wav
+  action_moose_bass_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Bass 01-130BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Grands_Cm_90_Bass-90BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Grands_Cm_90_Bass-90BPM-C minor-BANDLAB.wav
+  action_moose_bass_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Bass 02-130BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_808Boomer_Cm_130_Bass-130BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_808Boomer_Cm_130_Bass-130BPM-C minor-BANDLAB.wav
+  action_moose_bass_03:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Bass 03-130BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Drilla_Cm_130_Bass-130BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Drilla_Cm_130_Bass-130BPM-C minor-BANDLAB.wav
+  action_moose_bass_04:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Bass 04-130BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Beaches_Cm_130_Bass-130BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Beaches_Cm_130_Bass-130BPM-C minor-BANDLAB.wav
+  arcadia_bass_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Bass 01-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_MaggieMinor_Cm_96_Bass-96BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_MaggieMinor_Cm_96_Bass-96BPM-C minor-BANDLAB.wav
+  arcadia_bass_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Bass 02-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Jamz_Cm_96_Bass-96BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Jamz_Cm_96_Bass-96BPM-C minor-BANDLAB.wav
+  arcadia_bass_03:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Bass 03-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Atlas_Cm_90_Bass-90BPM-C#_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Atlas_C#m_90_Bass-90BPM-C♯ minor-BANDLAB.wav
+  arcadia_bass_04:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Bass 04-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Cloud9_Cm_90_Bass-90BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Cloud9_Cm_90_Bass-90BPM-C minor-BANDLAB.wav
+  arcadia_bass_05:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Bass 05-125BPM-E♭ major-BANDLAB.wav
     volume: 1.0
-  RNRLT_Dusty90s_Cm_90_Bass-90BPM-C#_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Dusty90s_C#m_90_Bass-90BPM-C♯ minor-BANDLAB.wav
-    volume: 1.0
-  RNRLT_Beaches_Cm_90_Bass-90BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Beaches_Cm_90_Bass-90BPM-C minor-BANDLAB.wav
-    volume: 1.0
-  RNRLT_Diamonds_Cm_90_Bass-120BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Diamonds_Cm_90_Bass-120BPM-C minor-BANDLAB.wav
-    volume: 1.0
-  RNRLT_Boomer_Cm_90_Bass-90BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Boomer_Cm_90_Bass-90BPM-C minor-BANDLAB.wav
-    volume: 1.0
-  RNRLT_Charred_Dm_90_Bass-90BPM-D#_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Charred_D#m_90_Bass-90BPM-D♯ minor-BANDLAB.wav
-    volume: 1.0
-  RNRLT_French_Cm_90_Bass-90BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_French_Cm_90_Bass-90BPM-C minor-BANDLAB.wav
-    volume: 1.0
-  RNRLT_Titi_Cm_90_Bass-90BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/bass/RNRLT_Titi_Cm_90_Bass-90BPM-C minor-BANDLAB.wav
+  arcadia_bass_06:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Bass 06-125BPM-E♭ major-BANDLAB.wav
     volume: 1.0
 
 mappings:
   0:
-    sound: RNRLT_Royal_Cm_90_Bass-90BPM-C_minor-BANDLAB
+    sound: action_moose_bass_01
   1:
-    sound: RNRLT_Grands_Cm_90_Bass-90BPM-C_minor-BANDLAB
+    sound: action_moose_bass_02
   2:
-    sound: RNRLT_808Boomer_Cm_130_Bass-130BPM-C_minor-BANDLAB
+    sound: action_moose_bass_03
   3:
-    sound: RNRLT_Drilla_Cm_130_Bass-130BPM-C_minor-BANDLAB
+    sound: action_moose_bass_04
   4:
-    sound: RNRLT_Beaches_Cm_130_Bass-130BPM-C_minor-BANDLAB
+    sound: arcadia_bass_01
   5:
-    sound: RNRLT_MaggieMinor_Cm_96_Bass-96BPM-C_minor-BANDLAB
+    sound: arcadia_bass_02
   6:
-    sound: RNRLT_Jamz_Cm_96_Bass-96BPM-C_minor-BANDLAB
+    sound: arcadia_bass_03
   7:
-    sound: RNRLT_Atlas_Cm_90_Bass-90BPM-C#_minor-BANDLAB
+    sound: arcadia_bass_04
   8:
-    sound: RNRLT_Cloud9_Cm_90_Bass-90BPM-C_minor-BANDLAB
+    sound: arcadia_bass_05
   9:
-    sound: RNRLT_Dusty90s_Cm_90_Bass-90BPM-C#_minor-BANDLAB
+    sound: arcadia_bass_06
   10:
-    sound: RNRLT_Beaches_Cm_90_Bass-90BPM-C_minor-BANDLAB
+    sound: action_moose_bass_01
+    volume: 0.8
   11:
-    sound: RNRLT_Diamonds_Cm_90_Bass-120BPM-C_minor-BANDLAB
+    sound: action_moose_bass_02
+    volume: 0.8
   12:
-    sound: RNRLT_Boomer_Cm_90_Bass-90BPM-C_minor-BANDLAB
+    sound: action_moose_bass_03
+    volume: 0.8
   13:
-    sound: RNRLT_Charred_Dm_90_Bass-90BPM-D#_minor-BANDLAB
+    sound: action_moose_bass_04
+    volume: 0.8
   14:
-    sound: RNRLT_French_Cm_90_Bass-90BPM-C_minor-BANDLAB
+    sound: arcadia_bass_01
+    volume: 0.8
   15:
-    sound: RNRLT_Titi_Cm_90_Bass-90BPM-C_minor-BANDLAB
+    sound: arcadia_bass_02
+    volume: 0.8

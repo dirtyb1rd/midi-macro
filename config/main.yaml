@@ -11,4 +11,4 @@ banks:
   A: config/banks/bass.yaml   # Bass sounds (shortest to longest)
   B: config/banks/drums.yaml  # Drum sounds (one-shots, shortest to longest)
   C: config/banks/synth.yaml  # Synth sounds (shortest to longest)
-  D: null                     # Reserved for automation
+  D: config/banks/automation.yaml  # Automation scripts and keyboard shortcuts

@@ -166,6 +166,28 @@ Roadmap
 
 ## Quick Start
 
+### NixOS / Nix Users (Recommended)
+
+This project includes a `flake.nix` for reproducible builds. **Do not use `nix-shell`** - it has issues with build tool visibility for Python packages with C extensions.
+
+```bash
+# Enter the development environment
+nix develop
+
+# Or with direnv (auto-loads when you cd into directory)
+direnv allow
+
+# Run the controller
+python src/main.py
+```
+
+**Why not `nix-shell`?**
+- `nix-shell` with `shell.nix` has issues where build tools (like `ninja` for `python-rtmidi`) aren't visible in uv's isolated build environment
+- The `flake.nix` properly manages Python packages through nixpkgs, avoiding compilation issues with `evdev`, `python-rtmidi`, and other C-extension packages
+- All dependencies are pre-built and cached from nixpkgs
+
+### Other Systems
+
 ```bash
 # Install system dependencies (Debian/Ubuntu)
 sudo apt-get install libasound2-dev libjack-jackd2-dev libportaudio2 python3-dev python3-pkgconfig

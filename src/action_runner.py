@@ -3,10 +3,12 @@ Action runner for automation engine.
 Handles script execution, HTTP webhooks, and keyboard shortcuts.
 """
 
+from pathlib import Path
 import subprocess
 import threading
-from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional
+
+from midi_types import ActionConfig
 
 
 class ActionRunner:
@@ -15,18 +17,18 @@ class ActionRunner:
     Supports scripts, webhooks, and keyboard shortcuts.
     """
 
-    def __init__(self, scripts_dir: str = "scripts"):
+    def __init__(self, scripts_dir: str = "scripts") -> None:
         """
         Initialize action runner.
 
         Args:
             scripts_dir: Directory containing script files
         """
-        self.scripts_dir = Path(scripts_dir)
-        self._lock = threading.Lock()
+        self.scripts_dir: Path = Path(scripts_dir)
+        self._lock: threading.Lock = threading.Lock()
         self._running_scripts: Dict[str, subprocess.Popen] = {}
 
-    def execute(self, action_config: Dict[str, Any]) -> bool:
+    def execute(self, action_config: ActionConfig) -> bool:
         """
         Execute an action based on configuration.
 
@@ -36,7 +38,7 @@ class ActionRunner:
         Returns:
             True if action was triggered, False otherwise
         """
-        action_type = action_config.get("type")
+        action_type: Optional[str] = action_config.get("type")
 
         if action_type == "script":
             return self._run_script(action_config)
@@ -48,9 +50,21 @@ class ActionRunner:
             print(f"Unknown action type: {action_type}")
             return False
 
-    def _run_script(self, config: Dict[str, Any]) -> bool:
+    def _send_notification(self, title: str, message: str, urgency: str = "normal") -> None:
+        """Send desktop notification using notify-send."""
+        try:
+            subprocess.run(
+                ["notify-send", title, message, f"--urgency={urgency}"],
+                capture_output=True,
+                check=False
+            )
+        except Exception:
+            # Silently fail if notify-send not available
+            pass
+
+    def _run_script(self, config: ActionConfig) -> bool:
         """
-        Execute a bash or Python script.
+        Execute a bash or Python script with notifications.
 
         Config format:
         {
@@ -60,58 +74,92 @@ class ActionRunner:
             "blocking": False  # Run in background or wait for completion
         }
         """
-        filename = config.get("file")
-        args = config.get("args", [])
-        blocking = config.get("blocking", False)
+        filename: Optional[str] = config.get("file")
+        args: List[str] = config.get("args", [])
+        blocking: bool = config.get("blocking", False)
 
         if not filename:
             print("Script action missing 'file' parameter")
+            self._send_notification("❌ Script Error", "Missing file parameter", "critical")
             return False
 
         # Resolve script path
-        script_path = self.scripts_dir / filename
+        script_path: Path = self.scripts_dir / filename
         if not script_path.exists():
             # Try absolute path
             script_path = Path(filename)
             if not script_path.exists():
                 print(f"Script not found: {filename}")
+                self._send_notification("❌ Script Not Found", filename, "critical")
                 return False
 
         # Build command
+        cmd: List[str]
         if filename.endswith(".py"):
             cmd = ["python", str(script_path)] + args
         else:
             cmd = ["bash", str(script_path)] + args
 
+        # Send start notification
+        display_name = filename.replace('.sh', '').replace('.py', '').replace('_', ' ').title()
+        self._send_notification("▶️ Script Started", display_name, "low")
+
         try:
             if blocking:
                 # Run synchronously
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+                result: subprocess.CompletedProcess = subprocess.run(
+                    cmd, capture_output=True, text=True, timeout=30
+                )
                 if result.returncode != 0:
-                    print(
-                        f"Script failed with code {result.returncode}: {result.stderr}"
+                    error_msg = result.stderr[:100] if result.stderr else "Unknown error"
+                    self._send_notification(
+                        f"❌ {display_name} Failed",
+                        f"Exit code {result.returncode}: {error_msg}",
+                        "critical"
                     )
+                    print(f"Script failed with code {result.returncode}: {result.stderr}")
                     return False
+                
+                # Success notification
+                output_preview = result.stdout[:100] if result.stdout else "Completed successfully"
+                self._send_notification(
+                    f"✅ {display_name} Complete",
+                    output_preview,
+                    "normal"
+                )
                 return True
             else:
                 # Run in background
-                process = subprocess.Popen(
+                process: subprocess.Popen = subprocess.Popen(
                     cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
                 )
-                script_key = f"{filename}_{threading.current_thread().ident}"
+                script_key: str = f"{filename}_{threading.current_thread().ident}"
                 with self._lock:
                     # Clean up finished scripts
                     for key, proc in list(self._running_scripts.items()):
                         if proc.poll() is not None:
                             del self._running_scripts[key]
                     self._running_scripts[script_key] = process
+                
+                # Background notification
+                self._send_notification(
+                    f"🔄 {display_name} Running",
+                    "Script started in background",
+                    "low"
+                )
                 return True
 
         except Exception as e:
+            error_str = str(e)[:100]
+            self._send_notification(
+                f"❌ {display_name} Error",
+                error_str,
+                "critical"
+            )
             print(f"Error running script {filename}: {e}")
             return False
 
-    def _run_webhook(self, config: Dict[str, Any]) -> bool:
+    def _run_webhook(self, config: ActionConfig) -> bool:
         """
         Send HTTP webhook request.
 
@@ -124,10 +172,10 @@ class ActionRunner:
             "body": {"key": "value"}
         }
         """
-        url = config.get("url")
-        method = config.get("method", "POST").upper()
-        headers = config.get("headers", {})
-        body = config.get("body")
+        url: Optional[str] = config.get("url")
+        method: str = config.get("method", "POST").upper()
+        headers: Dict[str, str] = config.get("headers", {})
+        body: Optional[Dict] = config.get("body")
 
         if not url:
             print("Webhook action missing 'url' parameter")
@@ -136,6 +184,7 @@ class ActionRunner:
         try:
             import httpx
 
+            response: httpx.Response
             if method == "POST":
                 response = httpx.post(url, json=body, headers=headers, timeout=10.0)
             elif method == "GET":
@@ -154,7 +203,7 @@ class ActionRunner:
             print(f"Error sending webhook to {url}: {e}")
             return False
 
-    def _run_keyboard(self, config: Dict[str, Any]) -> bool:
+    def _run_keyboard(self, config: ActionConfig) -> bool:
         """
         Inject keyboard shortcut.
 
@@ -164,7 +213,7 @@ class ActionRunner:
             "shortcut": "ctrl+shift+a"
         }
         """
-        shortcut = config.get("shortcut")
+        shortcut: Optional[str] = config.get("shortcut")
 
         if not shortcut:
             print("Keyboard action missing 'shortcut' parameter")
@@ -174,12 +223,12 @@ class ActionRunner:
             from pynput.keyboard import Controller, Key
 
             # Parse shortcut string (e.g., "ctrl+shift+a")
-            keys = shortcut.lower().split("+")
+            keys: List[str] = shortcut.lower().split("+")
 
-            keyboard = Controller()
+            keyboard: Controller = Controller()
 
             # Map key names to pynput Key objects
-            key_map = {
+            key_map: Dict[str, Key] = {
                 "ctrl": Key.ctrl,
                 "control": Key.ctrl,
                 "shift": Key.shift,
@@ -212,8 +261,8 @@ class ActionRunner:
             }
 
             # Separate modifier keys from regular keys
-            modifiers = []
-            regular_keys = []
+            modifiers: List[Key] = []
+            regular_keys: List = []
 
             for key in keys:
                 if key in key_map:
@@ -263,7 +312,7 @@ class ActionRunner:
             print(f"Error injecting keyboard shortcut '{shortcut}': {e}")
             return False
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Terminate any running background scripts."""
         with self._lock:
             for script_key, process in list(self._running_scripts.items()):

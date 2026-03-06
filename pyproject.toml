@@ -14,3 +14,24 @@ dependencies = [
     "sounddevice>=0.4.6",
     "soundfile>=0.12.1",
 ]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.8.0",
+]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+show_column_numbers = true

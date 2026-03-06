@@ -1,87 +1,86 @@
-# Bank C: Synth Sounds
-# Sorted by duration (shortest to longest)
-# Range: 14.77s to 21.33s
+# Bank C: Synth/Lead/Melody Sounds
+# Japanese Game Sounds - Lead, Melody, Chords, and Squiggly collection
 
 sounds:
-  RNRLT_BoomerChords_Cm_130_Synth-130BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_BoomerChords_Cm_130_Synth-130BPM-C minor-BANDLAB.wav
+  arcadia_lead_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Lead 01-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Beaches_Cm_130_Synth-130BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_Beaches_Cm_130_Synth-130BPM-C minor-BANDLAB.wav
+  arcadia_lead_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Lead 02-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_BeachesLead_Cm_130_Synth-130BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_BeachesLead_Cm_130_Synth-130BPM-C minor-BANDLAB.wav
+  arcadia_lead_03:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Lead 03-125BPM-D minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_BigOldLeadRiff_Cm_130_Synth-130BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_BigOldLeadRiff_Cm_130_Synth-130BPM-C minor-BANDLAB.wav
+  arcadia_lead_04:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Lead 04-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Jamz_Cm_96_Synth-96BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_Jamz_Cm_96_Synth-96BPM-C minor-BANDLAB.wav
+  arcadia_lead_05:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Lead 05-125BPM-E♭ major-BANDLAB.wav
     volume: 1.0
-  RNRLT_JamzLead_Cm_96_Synth-96BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_JamzLead_Cm_96_Synth-96BPM-C minor-BANDLAB.wav
+  arcadia_lead_06:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Lead 06-125BPM-E♭ major-BANDLAB.wav
     volume: 1.0
-  RNRLT_Maggie_Cm_96_Synth-96BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_Maggie_Cm_96_Synth-96BPM-C minor-BANDLAB.wav
+  arcadia_melody_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Melody 01-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_MaggieMinor_Cm_96_Synth-96BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_MaggieMinor_Cm_96_Synth-96BPM-C minor-BANDLAB.wav
+  arcadia_melody_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Melody 02-125BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Primrose_Am_90_Synth-90BPM-A_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_Primrose_Am_90_Synth-90BPM-A minor-BANDLAB.wav
+  cartridge_chords_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Chords 01-120BPM-A minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_ChaosMode_Bm_90_Synth-90BPM-B_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_ChaosMode_Bm_90_Synth-90BPM-B minor-BANDLAB.wav
+  cartridge_chords_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Chords 02-120BPM-A minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Swim_Em_90_Synth-90BPM-E_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_Swim_Em_90_Synth-90BPM-E minor-BANDLAB.wav
+  cartridge_chords_03:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Chords 03-120BPM-A minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_PsychArps_Fm_90_Synth-90BPM-F#_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_PsychArps_F#m_90_Synth-90BPM-F♯ minor-BANDLAB.wav
+  cartridge_chords_04:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Chords 04-120BPM-A minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Castles_Bm_90_Synth-90BPM-B_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_Castles_Bm_90_Synth-90BPM-B minor-BANDLAB.wav
+  cartridge_melody_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Melody 01-120BPM-A minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Fireworks_Dm_90_Synth-90BPM-D_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_Fireworks_Dm_90_Synth-90BPM-D minor-BANDLAB.wav
+  cartridge_melody_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Melody 02-120BPM-A minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_Atlas_Cm_90_Synth-90BPM-C#_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_Atlas_C#m_90_Synth-90BPM-C♯ minor-BANDLAB.wav
+  action_moose_squiggly_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Squiggly 01-130BPM-G minor-BANDLAB.wav
     volume: 1.0
-  RNRLT_French_Cm_90_Synth-90BPM-C_minor-BANDLAB:
-    file: sounds/hip-hop-pack-1/synth/RNRLT_French_Cm_90_Synth-90BPM-C minor-BANDLAB.wav
+  action_moose_squiggly_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Squiggly 02-130BPM-G minor-BANDLAB.wav
     volume: 1.0
 
 mappings:
   0:
-    sound: RNRLT_BoomerChords_Cm_130_Synth-130BPM-C_minor-BANDLAB
+    sound: arcadia_lead_01
   1:
-    sound: RNRLT_Beaches_Cm_130_Synth-130BPM-C_minor-BANDLAB
+    sound: arcadia_lead_02
   2:
-    sound: RNRLT_BeachesLead_Cm_130_Synth-130BPM-C_minor-BANDLAB
+    sound: arcadia_lead_03
   3:
-    sound: RNRLT_BigOldLeadRiff_Cm_130_Synth-130BPM-C_minor-BANDLAB
+    sound: arcadia_lead_04
   4:
-    sound: RNRLT_Jamz_Cm_96_Synth-96BPM-C_minor-BANDLAB
+    sound: arcadia_lead_05
   5:
-    sound: RNRLT_JamzLead_Cm_96_Synth-96BPM-C_minor-BANDLAB
+    sound: arcadia_lead_06
   6:
-    sound: RNRLT_Maggie_Cm_96_Synth-96BPM-C_minor-BANDLAB
+    sound: arcadia_melody_01
   7:
-    sound: RNRLT_MaggieMinor_Cm_96_Synth-96BPM-C_minor-BANDLAB
+    sound: arcadia_melody_02
   8:
-    sound: RNRLT_Primrose_Am_90_Synth-90BPM-A_minor-BANDLAB
+    sound: cartridge_chords_01
   9:
-    sound: RNRLT_ChaosMode_Bm_90_Synth-90BPM-B_minor-BANDLAB
+    sound: cartridge_chords_02
   10:
-    sound: RNRLT_Swim_Em_90_Synth-90BPM-E_minor-BANDLAB
+    sound: cartridge_chords_03
   11:
-    sound: RNRLT_PsychArps_Fm_90_Synth-90BPM-F#_minor-BANDLAB
+    sound: cartridge_chords_04
   12:
-    sound: RNRLT_Castles_Bm_90_Synth-90BPM-B_minor-BANDLAB
+    sound: cartridge_melody_01
   13:
-    sound: RNRLT_Fireworks_Dm_90_Synth-90BPM-D_minor-BANDLAB
+    sound: cartridge_melody_02
   14:
-    sound: RNRLT_Atlas_Cm_90_Synth-90BPM-C#_minor-BANDLAB
+    sound: action_moose_squiggly_01
   15:
-    sound: RNRLT_French_Cm_90_Synth-90BPM-C_minor-BANDLAB
+    sound: action_moose_squiggly_02

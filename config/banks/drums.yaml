@@ -1,87 +1,83 @@
-# Bank B: Drum Sounds
-# Sorted by duration (shortest to longest)
-# Range: 0.42s to 2.82s (all one-shots, perfect for drum pads)
+# Bank B: Drum/Beat Sounds
+# Japanese Game Sounds - Beat and Drum collection
 
 sounds:
-  RNRLT_DustyClap1_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_DustyClap1_OneShot-BANDLAB.wav
+  action_moose_beat_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Beat 01-130BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_BreatherPerc_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_BreatherPerc_OneShot-BANDLAB.wav
+  action_moose_beat_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Beat 02-130BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_DustyKick_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_DustyKick_OneShot-BANDLAB.wav
+  action_moose_beat_03:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Beat 03-130BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_DustyClap2_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_DustyClap2_OneShot-BANDLAB.wav
+  action_moose_beat_04:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Action Moose Beat 04-130BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_SlammerHat_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_SlammerHat_OneShot-BANDLAB.wav
+  arcadia_beat_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Beat 01-125BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_SlammerSnare_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_SlammerSnare_OneShot-BANDLAB.wav
+  arcadia_beat_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Beat 02-125BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_SteamPerc_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_SteamPerc_OneShot-BANDLAB.wav
+  arcadia_beat_03:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Beat 03-125BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_WestwaySnare_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_WestwaySnare_OneShot-BANDLAB.wav
+  arcadia_beat_04:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Beat 04-125BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_BreathPerc_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_BreathPerc_OneShot-BANDLAB.wav
+  arcadia_beat_05:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Beat 05-125BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_Hatzzz_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_Hatzzz_OneShot-BANDLAB.wav
+  arcadia_beat_06:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Beat 06-125BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_SlammerKick_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_SlammerKick_OneShot-BANDLAB.wav
+  arcadia_beat_07:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Arcadia Beat 07-125BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_DustySnare_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_DustySnare_OneShot-BANDLAB.wav
+  cartridge_drums_01:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Drums 01-120BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_DarkClap_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_DarkClap_OneShot-BANDLAB.wav
+  cartridge_drums_02:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Drums 02-120BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_DustyRumbleKick_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_DustyRumbleKick_OneShot-BANDLAB.wav
+  cartridge_drums_03:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Drums 03-120BPM-BANDLAB.wav
     volume: 1.0
-  RNRLT_LilTom_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_LilTom_OneShot-BANDLAB.wav
-    volume: 1.0
-  RNRLT_DarkKick_OneShot-BANDLAB:
-    file: sounds/hip-hop-pack-1/drums/RNRLT_DarkKick_OneShot-BANDLAB.wav
+  cartridge_drums_04:
+    file: sounds/JAPANESE-GAME-SOUNDS-BANDLAB/Cartridge Drums 04-120BPM-BANDLAB.wav
     volume: 1.0
 
 mappings:
   0:
-    sound: RNRLT_DustyClap1_OneShot-BANDLAB
+    sound: action_moose_beat_01
   1:
-    sound: RNRLT_BreatherPerc_OneShot-BANDLAB
+    sound: action_moose_beat_02
   2:
-    sound: RNRLT_DustyKick_OneShot-BANDLAB
+    sound: action_moose_beat_03
   3:
-    sound: RNRLT_DustyClap2_OneShot-BANDLAB
+    sound: action_moose_beat_04
   4:
-    sound: RNRLT_SlammerHat_OneShot-BANDLAB
+    sound: arcadia_beat_01
   5:
-    sound: RNRLT_SlammerSnare_OneShot-BANDLAB
+    sound: arcadia_beat_02
   6:
-    sound: RNRLT_SteamPerc_OneShot-BANDLAB
+    sound: arcadia_beat_03
   7:
-    sound: RNRLT_WestwaySnare_OneShot-BANDLAB
+    sound: arcadia_beat_04
   8:
-    sound: RNRLT_BreathPerc_OneShot-BANDLAB
+    sound: arcadia_beat_05
   9:
-    sound: RNRLT_Hatzzz_OneShot-BANDLAB
+    sound: arcadia_beat_06
   10:
-    sound: RNRLT_SlammerKick_OneShot-BANDLAB
+    sound: arcadia_beat_07
   11:
-    sound: RNRLT_DustySnare_OneShot-BANDLAB
+    sound: cartridge_drums_01
   12:
-    sound: RNRLT_DarkClap_OneShot-BANDLAB
+    sound: cartridge_drums_02
   13:
-    sound: RNRLT_DustyRumbleKick_OneShot-BANDLAB
+    sound: cartridge_drums_03
   14:
-    sound: RNRLT_LilTom_OneShot-BANDLAB
+    sound: cartridge_drums_04
   15:
-    sound: RNRLT_DarkKick_OneShot-BANDLAB
+    sound: action_moose_beat_01
