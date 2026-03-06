@@ -1,174 +1,48 @@
 # Midi Fighter 3D Macro Controller
 
-Turned my midi controller into a stream deck, soundboard, and automation controller. Mapping 64 buttons across 4 banks to play sounds with volume control, run scripts, trigger webhooks, and inject keyboard shortcuts.
+Turn a Midi Fighter 3D controller into a stream deck, soundboard, and automation controller. Maps 64 buttons across 4 banks to play sounds, run scripts, trigger webhooks, and inject keyboard shortcuts.
 
+## Features
 
-- Key Features:
-  - 4 Banks: A, B, C, D - 64 total buttons
-  - Auto-switching: Press any grid button to automatically switch to its bank
-  - Pre-loaded: All sounds loaded into memory at startup for instant playback
-  - Volume Control: Set per-sound default and per-button override
-  - Toggle Behavior: Press button again to stop currently playing sound
+- 4 Banks: A, B, C, D - 64 total buttons
+- Auto-switching: Press any grid button to automatically switch to its bank
+- Pre-loaded: All sounds loaded into memory at startup for instant playback
+- Volume Control: Set per-sound default and per-button override
+- Toggle Behavior: Press button again to stop currently playing sound
+- Automation: Run bash scripts, send webhooks, inject keyboard shortcuts
+- GUI Interface: PyQt6-based interface with real-time feedback
 
----
+## GUI Interface
 
-## What Exists
+A PyQt6-based GUI with the following features:
 
-- Discovery & Data Collection
-- Manual testing script maps actual MIDI events
-- Documented note numbers and channel assignments:
-  - Grid buttons: Notes 36-99 on Channel 3 (mido channel 2)
-  - Bank switches: Notes 0-3 on Channel 4 (mido channel 3)
-  - Bank A: 36-51, B: 52-67, C: 68-83, D: 84-99
+- 4x4 Button Grid: Visual representation of the physical controller
+- Bank Display: Large indicator showing current bank (A/B/C/D) with color coding
+- Audio Visualizer: Real-time waveform display using PyQtGraph
+- Script Output Panel: Real-time TTY showing script execution output
+- Config Editor: Built-in YAML editor with syntax validation and revert capability
+- Button Feedback: Buttons flash when pressed on the controller, blink while sounds play
+- Bank-Specific Display: Only shows buttons for the currently selected bank
 
-- Core Infrastructure
-- mido/rtmidi event loop with callback-based input
-- Bank state machine with 4 modes (A/B/C/D)
-- Auto-bank detection (press any grid button to switch)
-- Configuration system (YAML mappings with volume control)
+### Running the GUI
 
-- Soundboard Engine
-- Audio playback with sounddevice
-- Pre-loaded sounds for instant playback, no first-press delay
-- Multi-bank soundboard with different sounds per bank
-- Volume control per sound and per-button override
-- Stop/restart overlapping sounds (toggle behavior)
-
----
-
-## Audio Architecture Evolution
-
-### The ALSA Problem
-
-The journey to reliable audio playback involved testing three different architectures, each with trade-offs between latency, complexity, and ALSA compatibility.
-
-#### Architecture 1: Per-Button Thread + Per-Stream Creation ❌
-
-**Implementation:** Each button press spawned a new thread, which created a new `sounddevice.OutputStream`, played the sound, then cleaned up.
-
-```
-Button Press → New Thread → New OutputStream → Play → Close Stream
+```bash
+nix develop
+python src/gui/main_window.py
 ```
 
-**Issues:**
-- **ALSA Resource Conflicts**: Direct ALSA access doesn't support concurrent streams. Each new stream attempted to open the audio device, causing `mmap` failures and "Invalid stream pointer" errors
-- **Race Conditions**: Multiple threads opening/closing streams simultaneously corrupted ALSA's internal state
-- **High Latency**: Creating a new stream for each button press added 10-50ms overhead
-- **Device Exhaustion**: Rapid button presses eventually exhausted available PCM devices
-
-**Error Examples:**
-```
-PaErrorCode -9999: Unanticipated host error [alsa_snd_pcm_mmap_begin]
-PaErrorCode -9988: Invalid stream pointer
-PaErrorCode -9993: Illegal combination of I/O devices
-```
-
-#### Architecture 2: Retry Logic + Explicit Device Parameters ⚠️
-
-**Implementation:** Added explicit ALSA parameters (blocksize=1024, latency='high') and retry logic with exponential backoff.
-
-**Improvements:**
-- Explicit device selection (`device=sd.default.device[1]`)
-- Configured ALSA-friendly buffer settings
-- 3-attempt retry with exponential backoff (50ms → 100ms → 200ms)
-
-**Remaining Issues:**
-- **Still Failed Under Load**: While individual sounds played, rapid button mashing (drum rolls) still caused stream corruption
-- **Retry Delays**: Added audible latency when ALSA was busy
-- **Fundamental Design Flaw**: Creating multiple streams for concurrent playback is incompatible with ALSA's single-stream model (without dmix plugin)
-
-#### Architecture 3: Single Persistent Stream + Mixer Thread ✅ (Current)
-
-**Implementation:** One persistent `OutputStream` created at startup, with a background mixer thread continuously writing mixed audio.
-
-```
-Startup: Create Persistent OutputStream → Start Mixer Thread
-Button Press: Add sound to active list (immediate, ~0.1ms)
-Mixer Thread: Continuously mix active sounds → Write to stream
-```
-
-**Key Design Decisions:**
-- **Pre-created Stream**: Audio device opened once and kept open throughout application lifetime
-- **Background Mixer Thread**: Continuously generates audio blocks (2048 samples) by mixing all active sounds
-- **Resampling**: All sounds normalized to 44.1kHz at load time for consistent mixing
-- **Toggle Behavior**: Pressing the same button twice restarts the sound (resets position to 0)
-- **Lock-free Design**: Uses threading.Lock only for the active sounds list, not for stream access
-
-**Benefits:**
-- ✅ **Zero ALSA Conflicts**: Only one stream ever exists
-- ✅ **Minimal Latency**: ~2-10ms button-to-sound (limited by buffer size)
-- ✅ **Overlapping Sounds**: Natural mixing of multiple simultaneous sounds
-- ✅ **No Stream Creation Overhead**: Immediate playback, no allocation
-- ✅ **Predictable Performance**: Constant latency regardless of button press rate
-
-**Trade-offs:**
-- **Memory Usage**: All sounds resampled to 44.1kHz stereo at load time (2x memory for mono files)
-- **CPU Usage**: Mixer thread runs continuously (~5% CPU on modern hardware)
-- **Complexity**: More code than simple per-stream approach
-
-### Configuration Architecture
-
-**Monolithic Config → Modular Config**
-
-Evolved from a single `config.yaml` to a modular structure:
-
-```
-config/
-├── main.yaml          # MIDI settings + bank file references
-└── banks/
-    ├── bass.yaml      # 16 bass sounds (sorted by duration)
-    ├── drums.yaml     # 16 drum sounds (one-shots)
-    └── synth.yaml     # 16 synth sounds
-```
-
-**Rationale:**
-- Bank configs can be edited independently
-- Duration-sorted sounds (shortest → longest per bank)
-- Easy to swap entire banks
-- Bank D reserved for automation (future)
-
----
-
-## Todo List
-
-- Automation Engine
-  - Bash/Python script execution with args
-  - HTTP webhooks: POST/GET with httpx
-  - Keyboard shortcuts via pynput
-
-- Audio Enhancement
-  - Multi-device routing: Speakers + mic monitor simultaneously
-  - Audio loop support
-
-- LED & Polish
-  - Static LED colors per bank
-  - CLI interface for testing/config
-  - LED flash on press animations
-  - Full RGB control per button
-
-- Code Quality & Tooling
-  - Add mypy for static type checking
-  - Add typer for CLI interface
-  - Add ruff for linting and formatting
-  - Add type hints to all modules
-  - Create development documentation
-
-Roadmap
-- Motion: CC passthrough to other apps
-- Motion: Gesture triggers (tilt actions)
-- Security: Script sandboxing/allowlist
-- Security: Execution timeouts
-- Config: Include directive for split files
-- Deployment: systemd service support
-- Deployment: GUI tray application
-
----
+The GUI integrates with the backend:
+- MIDI input from controller triggers GUI button flashing
+- Sound playback causes button blinking while active
+- Script execution shows real-time output in TTY panel
+- Bank switching updates button labels and colors
+- Audio visualizer displays real-time waveform
 
 ## Quick Start
 
 ### NixOS / Nix Users (Recommended)
 
-This project includes a `flake.nix` for reproducible builds. **Do not use `nix-shell`** - it has issues with build tool visibility for Python packages with C extensions.
+This project includes a `flake.nix` for reproducible builds. Use `nix develop` not `nix-shell`.
 
 ```bash
 # Enter the development environment
@@ -177,12 +51,15 @@ nix develop
 # Or with direnv (auto-loads when you cd into directory)
 direnv allow
 
-# Run the controller
+# Run the CLI version
 python src/main.py
+
+# Run the GUI version
+python src/gui/main_window.py
 ```
 
-**Why not `nix-shell`?**
-- `nix-shell` with `shell.nix` has issues where build tools (like `ninja` for `python-rtmidi`) aren't visible in uv's isolated build environment
+Why not `nix-shell`?
+- `nix-shell` with `shell.nix` has issues where build tools aren't visible in uv's isolated build environment
 - The `flake.nix` properly manages Python packages through nixpkgs, avoiding compilation issues with `evdev`, `python-rtmidi`, and other C-extension packages
 - All dependencies are pre-built and cached from nixpkgs
 
@@ -193,26 +70,30 @@ python src/main.py
 sudo apt-get install libasound2-dev libjack-jackd2-dev libportaudio2 python3-dev python3-pkgconfig
 
 # Install dependencies
-pip install mido python-rtmidi sounddevice soundfile httpx pynput pyyaml
+pip install mido python-rtmidi sounddevice soundfile httpx pynput pyyaml pyqt6 pyqtgraph
 
 # Run the controller
 python src/main.py
+
+# Or run the GUI
+python src/gui/main_window.py
 ```
 
 ## Configuration
 
-The system uses a **modular configuration** structure:
+The system uses a modular configuration structure:
 
 ```
 config/
 ├── main.yaml          # MIDI settings + bank file references
 └── banks/
-    ├── bass.yaml      # Bank A: Bass sounds (sorted by duration)
-    ├── drums.yaml     # Bank B: Drum sounds (one-shots)
-    └── synth.yaml     # Bank C: Synth sounds
+    ├── bass.yaml      # Bank A: Bass sounds
+    ├── drums.yaml     # Bank B: Drum sounds  
+    ├── synth.yaml     # Bank C: Synth sounds
+    └── automation.yaml # Bank D: Scripts and shortcuts
 ```
 
-### Main Config (`config/main.yaml`)
+### Main Config (config/main.yaml)
 
 ```yaml
 midi:
@@ -220,60 +101,146 @@ midi:
   grid_channel: 1
   bank_channel: 2
 
-# Bank configuration files
 banks:
   A: config/banks/bass.yaml
   B: config/banks/drums.yaml
   C: config/banks/synth.yaml
-  D: null  # Reserved for automation
+  D: config/banks/automation.yaml
 ```
 
-### Bank Config (`config/banks/drums.yaml`)
-
-Each bank file contains sounds and button mappings:
+### Bank Config (config/banks/drums.yaml)
 
 ```yaml
-# Define sounds for this bank
 sounds:
   drum_kick:
     file: sounds/kick.wav
     volume: 1.0
-  drum_snare:
-    file: sounds/snare.wav
-    volume: 0.9
 
-# Map buttons 0-15 to sounds
 mappings:
   0:
     sound: drum_kick
-    volume: 1.0  # Optional: override default volume
+    volume: 1.0
   1:
-    sound: drum_snare
+    action:
+      type: script
+      file: get_ip.sh
+      blocking: true
 ```
 
-### Duration-Sorted Banks
+### Automation Scripts (Bank D)
 
-Sounds in each bank are sorted by duration (shortest → longest):
-- **Bank A (Bass)**: 10.67s → 21.33s
-- **Bank B (Drums)**: 0.42s → 2.82s (all one-shots)
-- **Bank C (Synth)**: 14.77s → 21.33s
+Bank D is configured for automation with no sounds:
 
-This makes short sounds easily accessible on buttons 0-3, longer sounds on 12-15.
+```yaml
+sounds: {}
 
----
+mappings:
+  0:
+    action:
+      type: script
+      file: get_ip.sh
+  1:
+    action:
+      type: script
+      file: get_weather.sh
+      args: ["Portland"]
+```
 
-## Asteroids + 3D Sensors
+Included Scripts:
+- `get_ip.sh` - Display public IP address
+- `get_weather.sh` - Show current weather
+- `get_space_fact.sh` - NASA astronomy fact
+- `get_joke.sh` - Random joke
+- `system_info.sh` - CPU/RAM/disk usage
+- `screenshot.sh` - Take timestamped screenshot
 
-The Midi Fighter 3D includes 3-axis motion sensors that output continuous controller (CC) messages. This enables controlling games and applications with physical gestures.
+## Audio Architecture
 
-Planned Use Cases:
-- Tilt-to-Steer: X/Y accelerometer mapped to ship rotation
-- Thrust Gesture: Forward tilt for thrust, backward for reverse
-- Fire Button: Velocity-sensitive grid buttons for weapons
-- Bank Switch: 4 weapon/powerup modes per bank
+### Current Implementation: Single Persistent Stream + Mixer Thread
 
-MIDI Mapping for Game Control:
-- CC 16: X-axis (tilt left/right) → ship rotation
-- CC 17: Y-axis (tilt forward/back) → thrust/reverse
-- CC 18: Z-axis (twist/tilt) → hyperspace/special
-- Notes 0-15: Fire, shields, special weapons per bank
+One persistent OutputStream created at startup, with a background mixer thread continuously writing mixed audio.
+
+```
+Startup: Create Persistent OutputStream → Start Mixer Thread
+Button Press: Add sound to active list (immediate, ~0.1ms)
+Mixer Thread: Continuously mix active sounds → Write to stream
+```
+
+Key Design Decisions:
+- Pre-created Stream: Audio device opened once and kept open throughout application lifetime
+- Background Mixer Thread: Continuously generates audio blocks (2048 samples) by mixing all active sounds
+- Resampling: All sounds normalized to 44.1kHz stereo at load time for consistent mixing
+- Toggle Behavior: Pressing the same button twice restarts the sound
+
+Benefits:
+- Zero ALSA Conflicts: Only one stream ever exists
+- Minimal Latency: ~2-10ms button-to-sound
+- Overlapping Sounds: Natural mixing of multiple simultaneous sounds
+- No Stream Creation Overhead: Immediate playback
+
+## Technical Notes
+
+### MIDI Mapping
+
+- Grid buttons: Notes 36-99 on Channel 3 (mido channel 2)
+- Bank switches: Notes 0-3 on Channel 4 (mido channel 3)
+- Bank A: 36-51, B: 52-67, C: 68-83, D: 84-99
+
+### Type Safety
+
+All modules use comprehensive type hints with mypy strict mode:
+- SoundConfig, ActionConfig, ButtonMapping - TypedDict definitions
+- BankCallback, ButtonCallback - Protocol types
+- npt.NDArray[np.float32] for audio data
+
+### GUI Development Notes
+
+Visualizer: Implemented using PyQtGraph for high-performance real-time plotting with proper audio/display synchronization.
+
+## File Structure
+
+```
+/home/bp/git/midi-macro/
+├── src/
+│   ├── main.py              # CLI entry point
+│   ├── main_gui.py          # GUI entry point
+│   ├── bank_manager.py      # Bank state machine
+│   ├── midi_handler.py      # MIDI input
+│   ├── soundboard.py        # Audio engine
+│   ├── action_runner.py     # Scripts/webhooks/keyboard
+│   ├── midi_types.py        # Type definitions
+│   └── gui/                 # GUI package
+│       ├── main_window.py   # Main GUI window
+│       ├── midi_button.py   # Custom button widget
+│       ├── midi_button_enhanced.py  # Animated button widget
+│       ├── visualizer_pyqtgraph.py  # Audio visualizer
+│       ├── tty_display.py   # Script output panel
+│       ├── yaml_editor.py   # Config editor
+│       ├── worker.py        # QThreadPool workers
+│       └── styles.py        # Theme definitions
+├── config/
+│   ├── main.yaml
+│   └── banks/
+├── scripts/                 # Automation scripts
+├── sounds/                  # Audio files
+├── flake.nix               # Nix development environment
+└── AGENTS.md              # Development guidelines
+```
+
+## Future Roadmap
+
+- Audio: Multi-device routing, audio looping
+- LED Control: RGB per button, animations
+- Motion Sensors: CC passthrough, gesture triggers
+- Security: Script sandboxing, execution timeouts
+- Deployment: systemd service, AppImage release
+
+## Credits
+
+Built with:
+- Python 3.13+
+- PyQt6 for GUI
+- mido/python-rtmidi for MIDI
+- sounddevice/soundfile for audio
+- PyQtGraph for visualization
+- Nix for reproducible builds

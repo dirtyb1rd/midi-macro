@@ -80,7 +80,7 @@ class ActionRunner:
 
         if not filename:
             print("Script action missing 'file' parameter")
-            self._send_notification("❌ Script Error", "Missing file parameter", "critical")
+            self._send_notification("Script Error", "Missing file parameter", "critical")
             return False
 
         # Resolve script path
@@ -90,7 +90,7 @@ class ActionRunner:
             script_path = Path(filename)
             if not script_path.exists():
                 print(f"Script not found: {filename}")
-                self._send_notification("❌ Script Not Found", filename, "critical")
+                self._send_notification("Script Not Found", filename, "critical")
                 return False
 
         # Build command
@@ -102,7 +102,7 @@ class ActionRunner:
 
         # Send start notification
         display_name = filename.replace('.sh', '').replace('.py', '').replace('_', ' ').title()
-        self._send_notification("▶️ Script Started", display_name, "low")
+        self._send_notification("Script Started", display_name, "low")
 
         try:
             if blocking:
@@ -113,7 +113,7 @@ class ActionRunner:
                 if result.returncode != 0:
                     error_msg = result.stderr[:100] if result.stderr else "Unknown error"
                     self._send_notification(
-                        f"❌ {display_name} Failed",
+                        f"{display_name} Failed",
                         f"Exit code {result.returncode}: {error_msg}",
                         "critical"
                     )
@@ -123,7 +123,7 @@ class ActionRunner:
                 # Success notification
                 output_preview = result.stdout[:100] if result.stdout else "Completed successfully"
                 self._send_notification(
-                    f"✅ {display_name} Complete",
+                    f"{display_name} Complete",
                     output_preview,
                     "normal"
                 )
@@ -143,7 +143,7 @@ class ActionRunner:
                 
                 # Background notification
                 self._send_notification(
-                    f"🔄 {display_name} Running",
+                    f"{display_name} Running",
                     "Script started in background",
                     "low"
                 )
@@ -152,7 +152,7 @@ class ActionRunner:
         except Exception as e:
             error_str = str(e)[:100]
             self._send_notification(
-                f"❌ {display_name} Error",
+                f"{display_name} Error",
                 error_str,
                 "critical"
             )

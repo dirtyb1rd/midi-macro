@@ -25,6 +25,8 @@
           numpy
           httpx
           pynput
+          pyqt6  # GUI framework
+          pyqtgraph  # Real-time plotting for visualizer
           
           # Development tools
           mypy
@@ -53,23 +55,26 @@
           ];
           
           shellHook = ''
-            echo "🎹 Midi Fighter 3D Macro Controller"
-            echo ""
-            echo "Python packages available:"
-            python --version
-            echo "  - mido (MIDI I/O)"
-            echo "  - python-rtmidi (MIDI backend)"
-            echo "  - sounddevice + soundfile (audio)"
-            echo "  - numpy (audio processing)"
-            echo "  - pynput (keyboard automation)"
-            echo "  - httpx (webhooks)"
-            echo "  - mypy (type checking)"
-            echo ""
-            echo "Available commands:"
-            echo "  python src/main.py     - Run the application"
-            echo "  python test_mf3d.py    - Test MIDI connectivity"
-            echo "  mypy src/              - Type check the code"
-            echo ""
+             echo "🎹 Midi Fighter 3D Macro Controller"
+             echo ""
+             echo "Python packages available:"
+             python --version
+             echo "  - mido (MIDI I/O)"
+             echo "  - python-rtmidi (MIDI backend)"
+             echo "  - sounddevice + soundfile (audio)"
+             echo "  - numpy (audio processing)"
+             echo "  - pynput (keyboard automation)"
+             echo "  - httpx (webhooks)"
+             echo "  - pyqt6 (GUI framework)"
+             echo "  - pyqtgraph (real-time plotting)"
+             echo "  - mypy (type checking)"
+             echo ""
+             echo "Available commands:"
+             echo "  python src/main.py        - Run CLI version"
+             echo "  python src/gui/main_window.py - Run GUI version"
+             echo "  python test_mf3d.py       - Test MIDI connectivity"
+             echo "  mypy src/                 - Type check the code"
+             echo ""
             
             # Set library path for audio
             export LD_LIBRARY_PATH="${pkgs.alsa-lib}/lib:${pkgs.portaudio}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"

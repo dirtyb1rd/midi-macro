@@ -7,7 +7,7 @@ and minimal latency with overlapping sound support.
 from pathlib import Path
 import threading
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 import numpy.typing as npt
@@ -51,6 +51,9 @@ class Soundboard:
         self._mixer_running: bool = False
         self._output_stream: Optional[sd.OutputStream] = None
         self._mixer_thread: Optional[threading.Thread] = None
+        
+        # Audio callback for visualizer
+        self._audio_callback: Optional[Callable[[float], None]] = None
 
         # Pre-load all unique sound files into memory
         print("Loading sounds...")
@@ -197,6 +200,14 @@ class Soundboard:
 
             # Clip to prevent overflow
             buffer = np.clip(buffer, -1.0, 1.0)
+            
+            # Send samples to visualizer callback if set
+            if self._audio_callback is not None and len(buffer) > 0:
+                # Send every 100th sample to avoid overwhelming the GUI
+                for i in range(0, len(buffer), 100):
+                    # Mix stereo to mono for visualizer
+                    sample = float((buffer[i, 0] + buffer[i, 1]) / 2)
+                    self._audio_callback(sample)
 
             # Write to output stream
             try:
@@ -235,6 +246,16 @@ class Soundboard:
 
             # Add new sound at position 0
             self._active_sounds.append((sound_data, 0, default_volume))
+
+    def set_audio_callback(self, callback: Optional[Callable[[float], None]]) -> None:
+        """
+        Set a callback function to receive audio samples for visualization.
+        
+        Args:
+            callback: Function that accepts a float sample value (mono, -1.0 to 1.0)
+                     or None to disable
+        """
+        self._audio_callback = callback
 
     def cleanup(self) -> None:
         """Stop mixer thread and close audio stream."""
